@@ -36,7 +36,7 @@ public class ProductView {
                     case 1:
                         List<Product> productList = productService.getAll();
                         CSVUtils.write(PATH, productList);
-                        displayProducts(productList);
+                        displayPart(productList);
                         break;
                     case 2:
                         Product newProduct = addProduct();
@@ -81,6 +81,7 @@ public class ProductView {
         int quantity;
         String description;
         boolean exists;
+        boolean input = false;
 
         try {
             System.out.println("Thông tin sản phẩm:");
@@ -202,47 +203,6 @@ public class ProductView {
         }
     }
 
-//    public String inputKeyword() {
-//        System.out.print("Search key: ");
-//        String key = scanner.nextLine();
-//        System.out.printf("\n      SEARCH BY KEY: '%s' \n",key);
-//        return key;
-//    }
-//
-//    public int inputId() {
-//        System.out.print("Input id of product: ");
-//        int id = Integer.parseInt(scanner.nextLine());
-//        System.out.printf("\n      SEARCH BY ID: '%d' \n",id);
-//        return id;
-//    }
-
-//    private void selectDisplayAction() {
-//        System.out.println("Select: ");
-//        System.out.println("1. Display all products");
-//        System.out.println("2. Display product list by price ascending");
-//        System.out.println("3. Display product list by descending price ");
-//        System.out.println();
-//        System.out.println("0. 'Cancel action'");
-//        System.out.print("==> ");
-//        choice = Integer.parseInt(scanner.nextLine());
-//        switch (choice) {
-//            case 1:
-//                displayProducts(productService.findAll());
-//                break;
-//            case 2:
-//                displayProducts(productService.findAllByPriceASC());
-//                break;
-//            case 3:
-//                displayProducts(productService.findAllByPriceDES());
-//                break;
-//            case 0:
-//                break;
-//            default:
-//                System.out.println("Invalid action!");
-//                selectDisplayAction();
-//                break;
-//        }
-//    }
     private void displayProducts(List<Product> products) {
         System.out.println("* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *");
         System.out.println("*                          LIST OF PRODUCTS                         *");
@@ -254,5 +214,33 @@ public class ProductView {
             System.out.printf("| %-5d| %-18s| %-8d| %-11d| %-16s|\n",
                     product.getId(), product.getName(), product.getPrice(), product.getQuantity(), product.getDescription());
         System.out.println("|______|___________________|_________|____________|_________________|");
+    }
+
+    private void displayPart(List<Product> products) {
+        System.out.println("* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *");
+        System.out.println("*                          LIST OF PRODUCTS                         *");
+        System.out.println("* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *");
+        System.out.println("_____________________________________________________________________");
+        System.out.println("|  ID  |       Name        |  Price  |  Quantity  |   Description   |");
+        System.out.println("|------|-------------------|---------|------------|-----------------|");
+        int j = 0;
+        int count = 1;
+        String key = "";
+
+        while (key.equals("") && j < products.size()) {
+            for (int i = j; i < products.size(); i++) {
+                System.out.printf("| %-5d| %-18s| %-8d| %-11d| %-16s|\n",
+                        products.get(i).getId(), products.get(i).getName(),
+                        products.get(i).getPrice(), products.get(i).getQuantity(), products.get(i).getDescription());
+                j = i + 1;
+                if (count++ % 5 == 0) {
+                    System.out.println("|------|-------------------|---------|------------|-----------------|");
+                    break;
+                }
+                if (j == products.size())
+                    System.out.println("|______|___________________|_________|____________|_________________|");
+            }
+            key = scanner.nextLine();
+        }
     }
 }
